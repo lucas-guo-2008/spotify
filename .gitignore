@@ -1,6 +1,7 @@
 # api keys and other local files
 *.rtf
 *.csv
+.DS_Store
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
