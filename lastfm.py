@@ -37,8 +37,6 @@ def get_artist_tags(artist: str, cache: dict) -> list:
         "autocorrect": 1
     }
 
-    print(f"Getting artist tags for {artist}")
-
     tags = []
     try:
         response = requests.get(url, params=params, timeout=10)
@@ -62,13 +60,13 @@ def main() -> None:
         unique_artists.update(artist_list)
 
     all_artists = list(unique_artists)
-    print(all_artists)
 
     cache = load_cache()
-    for artist in all_artists:
+    print(f"Looking up tags for {len(all_artists)} unique artists across {len(dataframe)} songs")
+    for i, artist in enumerate(all_artists, 1):
         get_artist_tags(artist, cache)
-
-    print("done")
+        if i % 25 == 0:
+            print(f"    {i}/{len(all_artists)} artists done")
 
     def get_tags(artists: list) -> str:
         if artists != artists:
@@ -84,6 +82,7 @@ def main() -> None:
     dataframe["Last.fm Tags"] = dataframe["Artist List"].apply(get_tags)
 
     dataframe.to_csv(OUTPUT_CSV, index=False)
+    print(f"\nFinished. Wrote {OUTPUT_CSV}")
 
 if __name__ == "__main__":
     main()
