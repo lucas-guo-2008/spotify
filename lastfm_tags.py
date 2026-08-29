@@ -18,8 +18,8 @@ from pathlib import Path
 load_dotenv()
 LASTFM_API_KEY = os.getenv("LASTFM_API_KEY")
 
-PLAYLIST_CSV = "HEHEHEHAW.csv"
-OUTPUT_CSV = "with_tags.csv"
+PLAYLIST_CSV = "input/HEHEHEHAW.csv"
+OUTPUT_CSV = "output/with_tags.csv"
 CACHE = "cache.json"
 REQUEST_DELAY = 0.25
 TOP_N_TAGS = 5
