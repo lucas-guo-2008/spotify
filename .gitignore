@@ -1,6 +1,7 @@
 # api keys and other local files
 *.rtf
 *.csv
+*.txt
 .DS_Store
 cache.json
 
