@@ -1,3 +1,12 @@
+"""
+Exportify provides some basic genre tags, but we can use Last.fm to enrichen the tags.
+
+Requirements:
+    pip install pandas requests dotenv
+
+Reads exportify's CSV, then uses Last.fm's api to get all the artists' top tags which are added to a local cache. Finally, writes a new CSV with a "Last.fm Tags" column.
+"""
+
 import os
 from dotenv import load_dotenv
 import time
