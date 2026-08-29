@@ -25,6 +25,8 @@ def get_artist_tags(artist: str) -> list:
         "autocorrect": 1
     }
 
+    print(f"Getting artist tags for {artist}")
+
     try:
         response = requests.get(url, params=params, timeout=10)
         data = response.json()
@@ -39,3 +41,11 @@ def get_artist_tags(artist: str) -> list:
 
 print(get_artist_tags("zedd"))
 
+def main() -> None:
+    dataframe = pandas.read_csv(PLAYLIST_CSV)
+    dataframe["Artist List"] = dataframe["Artist Name(s)"].dropna().apply(lambda val: [artist.strip() for artist in str(val).split(",")])
+
+    dataframe.to_csv(OUTPUT_CSV, index=False)
+
+if __name__ == "__main__":
+    main()
