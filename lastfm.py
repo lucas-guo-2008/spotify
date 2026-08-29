@@ -43,10 +43,10 @@ def get_artist_tags(artist: str, cache: dict) -> list:
     try:
         response = requests.get(url, params=params, timeout=10)
         data = response.json()
-        for tag in data.get("toptags", {}).get("tag", {}):
+        for tag in data.get("toptags", {}).get("tag", []):
             tags.append(tag.get("name"))
-    except Exception:
-        print(f"! Failed for {artist}: {Exception}")
+    except Exception as ex:
+        print(f"! Failed for {artist}: {ex}")
 
     cache[artist] = tags
     save_cache(cache)
@@ -67,6 +67,21 @@ def main() -> None:
     cache = load_cache()
     for artist in all_artists:
         get_artist_tags(artist, cache)
+
+    print("done")
+
+    def get_tags(artists: list) -> str:
+        if artists != artists:
+            return ""
+
+        tags = []
+        for artist in artists:
+            for tag in cache.get(artist, [])[:TOP_N_TAGS]:
+                if tag not in tags:
+                    tags.append(tag)
+        return ", ".join(tags)
+
+    dataframe["Last.fm Tags"] = dataframe["Artist List"].apply(get_tags)
 
     dataframe.to_csv(OUTPUT_CSV, index=False)
 
