@@ -2,6 +2,7 @@
 *.rtf
 *.csv
 .DS_Store
+cache.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
