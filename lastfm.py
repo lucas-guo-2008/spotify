@@ -45,6 +45,16 @@ def main() -> None:
     dataframe = pandas.read_csv(PLAYLIST_CSV)
     dataframe["Artist List"] = dataframe["Artist Name(s)"].dropna().apply(lambda val: [artist.strip() for artist in str(val).split(",")])
 
+    unique_artists = set()
+    for artist_list in dataframe["Artist List"].dropna():
+        unique_artists.update(artist_list)
+
+    all_artists = list(unique_artists)
+    print(all_artists)
+
+    for artist in all_artists:
+        get_artist_tags(artist)
+
     dataframe.to_csv(OUTPUT_CSV, index=False)
 
 if __name__ == "__main__":
