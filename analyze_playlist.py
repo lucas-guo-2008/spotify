@@ -14,6 +14,7 @@ dataframe = pandas.read_csv(INPUT_CSV)
 dataframe["Added At"] = pandas.to_datetime(dataframe["Added At"], errors="coerce")
 dataframe["Release Date"] = pandas.to_datetime(dataframe["Album Release Date"], errors="coerce")
 dataframe["Release Year"] = dataframe["Release Date"].dt.year
+dataframe["Track Duration"] = (dataframe["Track Duration (ms)"] / 1000).round()
 
 # # Distribution of songs by release year
 # fig1, ax1 = plt.subplots()
@@ -31,7 +32,7 @@ dataframe["Release Year"] = dataframe["Release Date"].dt.year
 # fig3, ax3 = plt.subplots()
 # hourly_counts = dataframe.groupby(dataframe["Added At"].dt.tz_convert('US/Pacific').dt.hour).size()
 # ax3.bar(hourly_counts.index, hourly_counts.values)
-# ax3.set(title="Distribution of Songs by Time of Day Added", xlabel="Hour Added", ylabel="Count", xticks=range(0, 24, 4), xlim=(-0.5, 23.5))
+# ax3.set(title="Distribution of Songs by Time of Day Added", xlabel="Hour of Day Added", ylabel="Count", xticks=range(0, 24, 4), xlim=(-0.5, 23.5))
 
 
 # # Distribution of songs by artist - first large, then top 25
@@ -56,6 +57,21 @@ dataframe["Release Year"] = dataframe["Release Date"].dt.year
 # ax5.tick_params(axis='x', labelrotation=45)
 # plt.setp(ax5.get_xticklabels(), ha='right')
 
+# Distribution of songs by length
+fig6, ax6 = plt.subplots()
+ax6.hist(dataframe["Track Duration"], bins=50)
+fig6.suptitle("Distribution of Songs by Length")
+avg_song_length = round(dataframe["Track Duration"].mean())
+avg_song_length_formatted = str(int((avg_song_length - avg_song_length % 60) / 60)) + ":" + str(avg_song_length % 60)
+ax6.set(xlabel="Song Length (s)", ylabel="Count", title=f"Average song length: {avg_song_length_formatted}")
+
+# Distribution of songs by "popularity" according to Spotify
+fig7, ax7 = plt.subplots()
+counts = dataframe["Popularity"].dropna().astype(int).value_counts().reindex(range(101), fill_value=0)
+ax7.bar(counts.index, counts.values)
+fig7.suptitle("Distribution of Songs by Popularity according to Spotify")
+ax7.set(xlabel="Popularity (0-100)", ylabel="Song Count", title=f"Average song popularity: {round(dataframe["Popularity"].mean(), 1)}")
+
 mplcursors.cursor(hover=True)
-plt.tight_layout()
+fig5.tight_layout()
 plt.show()
