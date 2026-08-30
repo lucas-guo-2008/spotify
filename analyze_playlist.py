@@ -63,14 +63,16 @@ ax6.hist(dataframe["Track Duration"], bins=50)
 fig6.suptitle("Distribution of Songs by Length")
 avg_song_length = round(dataframe["Track Duration"].mean())
 avg_song_length_formatted = str(int((avg_song_length - avg_song_length % 60) / 60)) + ":" + str(avg_song_length % 60)
-ax6.set(xlabel="Song Length (s)", ylabel="Count", title=f"Average song length: {avg_song_length_formatted}")
+ax6.set(xlabel="Song Length (s)", ylabel="Count", title=f"Average song length: {avg_song_length_formatted}", xlim=(-1, None))
 
 # Distribution of songs by "popularity" according to Spotify
 fig7, ax7 = plt.subplots()
 counts = dataframe["Popularity"].dropna().astype(int).value_counts().reindex(range(101), fill_value=0)
 ax7.bar(counts.index, counts.values)
 fig7.suptitle("Distribution of Songs by Popularity according to Spotify")
-ax7.set(xlabel="Popularity (0-100)", ylabel="Song Count", title=f"Average song popularity: {round(dataframe["Popularity"].mean(), 1)}")
+ax7.set(xlabel="Popularity (0-100)", ylabel="Song Count", title=f"Average song popularity: {round(dataframe["Popularity"].mean(), 1)}", xlim=(-1, 100.5))
+
+# Distribution of New Artists by Date First Added
 
 mplcursors.cursor(hover=True)
 fig5.tight_layout()
