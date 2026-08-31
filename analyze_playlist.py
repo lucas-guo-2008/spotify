@@ -57,23 +57,30 @@ dataframe["Track Duration"] = (dataframe["Track Duration (ms)"] / 1000).round()
 # ax5.tick_params(axis='x', labelrotation=45)
 # plt.setp(ax5.get_xticklabels(), ha='right')
 
-# Distribution of songs by length
-fig6, ax6 = plt.subplots()
-ax6.hist(dataframe["Track Duration"], bins=50)
-fig6.suptitle("Distribution of Songs by Length")
-avg_song_length = round(dataframe["Track Duration"].mean())
-avg_song_length_formatted = str(int((avg_song_length - avg_song_length % 60) / 60)) + ":" + str(avg_song_length % 60)
-ax6.set(xlabel="Song Length (s)", ylabel="Count", title=f"Average song length: {avg_song_length_formatted}", xlim=(-1, None))
+# # Distribution of songs by length
+# fig6, ax6 = plt.subplots()
+# ax6.hist(dataframe["Track Duration"], bins=50)
+# fig6.suptitle("Distribution of Songs by Length")
+# avg_song_length = round(dataframe["Track Duration"].mean())
+# avg_song_length_formatted = str(int((avg_song_length - avg_song_length % 60) / 60)) + ":" + str(avg_song_length % 60)
+# ax6.set(xlabel="Song Length (s)", ylabel="Count", title=f"Average song length: {avg_song_length_formatted}", xlim=(-1, None))
 
-# Distribution of songs by "popularity" according to Spotify
-fig7, ax7 = plt.subplots()
-counts = dataframe["Popularity"].dropna().astype(int).value_counts().reindex(range(101), fill_value=0)
-ax7.bar(counts.index, counts.values)
-fig7.suptitle("Distribution of Songs by Popularity according to Spotify")
-ax7.set(xlabel="Popularity (0-100)", ylabel="Song Count", title=f"Average song popularity: {round(dataframe["Popularity"].mean(), 1)}", xlim=(-1, 100.5))
+# # Distribution of songs by "popularity" according to Spotify
+# fig7, ax7 = plt.subplots()
+# counts = dataframe["Popularity"].dropna().astype(int).value_counts().reindex(range(101), fill_value=0)
+# ax7.bar(counts.index, counts.values)
+# fig7.suptitle("Distribution of Songs by Popularity according to Spotify")
+# ax7.set(xlabel="Popularity (0-100)", ylabel="Song Count", title=f"Average song popularity: {round(dataframe["Popularity"].mean(), 1)}", xlim=(-1, 100.5))
 
 # Distribution of New Artists by Date First Added
 
+# Portion of Songs that are Explicit
+fig9, ax9 = plt.subplots()
+explicit = dataframe["Explicit"].fillna(False).astype(bool).value_counts().reindex([True, False], fill_value=0)
+ax9.pie(explicit.values, labels=["Explicit", "Non-Explicit"], autopct="%1.1f%%", startangle=90, colors=['blue', 'green'])
+fig9.suptitle("What portion of my songs are have bad words?")
+ax9.set(title=f"{explicit.values[1]} don't have bad words and {explicit.values[0]} have bad words")
+
 mplcursors.cursor(hover=True)
-fig5.tight_layout()
+# fig5.tight_layout()
 plt.show()
