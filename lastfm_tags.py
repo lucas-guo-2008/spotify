@@ -16,14 +16,18 @@ load_dotenv()
 LASTFM_API_KEY = os.getenv("LASTFM_API_KEY")
 
 INPUT_FOLDER = Path("input")
-OUTPUT_CSV = "output/with_tags.csv"
-NEW_TAGS = "output/new_tags.txt"
-TAG_CACHE = "cache/tag_cache.json"
-CACHE = "cache/cache.json"
+OUTPUT_CSV = Path("output/with_tags.csv")
+NEW_TAGS = Path("output/new_tags.txt")
+TAG_CACHE = Path("cache/tag_cache.json")
+CACHE = Path("cache/cache.json")
 REQUEST_DELAY = 0.25
 TOP_N_TAGS = 5
 
 new_tags = set()
+
+def ensure_directories() -> None:
+    OUTPUT_CSV.parent.mkdir(parents=True, exist_ok=True)
+    CACHE.parent.mkdir(parents=True, exist_ok=True)
 
 def load_cache() -> dict:
     if Path(CACHE).exists():
@@ -68,6 +72,8 @@ def get_artist_tags(artist: str, cache: dict) -> list:
     return tags[:TOP_N_TAGS]
 
 def main() -> None:
+    ensure_directories()
+
     playlists = list(INPUT_FOLDER.glob("*.csv"))
     dataframe = pandas.concat([pandas.read_csv(file) for file in playlists], ignore_index=True)
     dataframe["Artist List"] = dataframe["Artist Name(s)"].dropna().apply(lambda val: [artist.strip() for artist in str(val).split(",")])

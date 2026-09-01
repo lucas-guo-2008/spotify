@@ -23,7 +23,7 @@ A small Python workflow for enriching a Spotify export with Last.fm tags, groupi
   ```bash
    pip install -r requirements.txt
   ```
-2. Add a Last.fm API key from https://www.last.fm/api/intro to a `.env` file:
+2. Add a Last.fm API key from https://www.last.fm/api#getting-started to a `.env` file:
   ```
   LASTFM_API_KEY=your_api_key_here
   ```
