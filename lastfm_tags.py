@@ -1,9 +1,6 @@
 """
 Exportify provides some basic genre tags, but we can use Last.fm to enrichen the tags.
 
-Requirements:
-    pip install pandas requests dotenv
-
 Reads exportify's CSV, then uses Last.fm's api to get all the artists' top tags which are added to a local cache. Finally, writes a new CSV with a "Last.fm Tags" column.
 """
 
@@ -18,11 +15,11 @@ from pathlib import Path
 load_dotenv()
 LASTFM_API_KEY = os.getenv("LASTFM_API_KEY")
 
-PLAYLIST_CSV = "input/HEHEHEHAW.csv"
+INPUT_FOLDER = Path("input")
 OUTPUT_CSV = "output/with_tags.csv"
 NEW_TAGS = "output/new_tags.txt"
-TAG_CACHE = "tag_cache.json"
-CACHE = "cache.json"
+TAG_CACHE = "cache/tag_cache.json"
+CACHE = "cache/cache.json"
 REQUEST_DELAY = 0.25
 TOP_N_TAGS = 5
 
@@ -71,7 +68,8 @@ def get_artist_tags(artist: str, cache: dict) -> list:
     return tags[:TOP_N_TAGS]
 
 def main() -> None:
-    dataframe = pandas.read_csv(PLAYLIST_CSV)
+    playlists = list(INPUT_FOLDER.glob("*.csv"))
+    dataframe = pandas.concat([pandas.read_csv(file) for file in playlists], ignore_index=True)
     dataframe["Artist List"] = dataframe["Artist Name(s)"].dropna().apply(lambda val: [artist.strip() for artist in str(val).split(",")])
 
     unique_artists = set()
@@ -109,9 +107,9 @@ def main() -> None:
     save_cache(cache, tag_cache)
     dataframe.to_csv(OUTPUT_CSV, index=False)
 
-    Path(NEW_TAGS).write_text(f"{len(new_tags)} new tags to process: \n{sorted(list(new_tags))}")
+    Path(NEW_TAGS).write_text(f"{len(new_tags)} new tags to process: \n{"\n".join(sorted(new_tags))}")
     print(f"\nFinished. Wrote {OUTPUT_CSV}")
-    print(f"{len(new_tags)} new tags to process: {sorted(list(new_tags))}")
+    print(f"{len(new_tags)} new tags to process: \n{sorted(list(new_tags))}")
 
 if __name__ == "__main__":
     main()

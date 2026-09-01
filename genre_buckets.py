@@ -7,8 +7,9 @@ import pandas
 INPUT_CSV = "output/with_tags.csv"
 OUTPUT_CSV = "output/songs_grouped.csv"
 
+# EDIT THIS!!
 GENRE_MAP = {
-    "No speak English": 
+    "No English": 
         ["C-pop", "Chinese Folk", "chinese-pop", "J-Indie", "J-rock", "JPop", "j-pop", "J-rnb", "j-urban", "jrock", "K-pop", "Kpop", "Mandopop"],
     "Mainstream": 
         ["alt-pop", "art pop", "alt z", "contemporary pop", "Country-Pop", "dance-pop", "dancepop", "electropop", "folk pop", "indie pop", "pop", "Pop-Rock", "Power pop", "powerpop", "retro pop", "Synth pop", "synthpop", "teen pop", "city pop", "Emo rap", "emorap", "Hip-Hop", "hiphop", "Melodic Rap", "Pop rap", "pop-rap", "Rap", "underground rap"],
